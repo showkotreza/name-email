@@ -1,10 +1,11 @@
+
 <html>
 <head> <title>Register</title></head>
 <body>
 
 <?php
 
-$nameErr=$emailErr="";
+$nameErr=$emailErr=$genderErr="";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
     $nameErr = "Name is required";
@@ -19,6 +20,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
   else {
     $email = test_input($_POST["email"]);
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $emailErr = "Invalid email format";
+    }
+  }
+  
+  if (empty($_POST["gender"])) {
+    $genderErr = "gender is required";
+	//echo $genderErr;
+  } 
+  else {
+    $gender = test_input($_POST["gender"]);
+	//var_dump($gender);
   }
 }
   function test_input($data) {
@@ -36,6 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <b>Email:<b> <input type="text" name="email">
 <span class="error">* <?php echo $emailErr;?></span>
 <br><br>
+<b>Gender:<b> <input type="radio" name="gender" value="male">male
+<input type="radio" name="gender" value="female">female
+<input type="radio" name="gender" value="other">other
+<span class="error">* <?php echo $genderErr;?></span>
+<br><br>
 <input type="submit" name="submit" value="Submit">
 </form>
 
@@ -49,8 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          
          echo $email;
          echo "<br>";
-?>	
-<?php
+		 
+		 echo $gender;
+         echo "<br>";
+	
+
 $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
 $txt = $name;
 
@@ -60,8 +81,13 @@ $txt =$email;
 
 fwrite($myfile, $txt);
 
+$txt =$gender;
+
+fwrite($myfile,$txt);
+
 fclose($myfile);
 ?>	 
 		 
 </body>
 </html>
+
